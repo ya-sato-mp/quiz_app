@@ -1,0 +1,118 @@
+
+# quiz_app (Development Workspace)
+
+This is a Laravel-based team development repository. Designed to avoid Git conflicts by completely separating assignment scopes.
+
+---
+
+## 🚀 Partner's Setup (Initial Environment)
+
+Please execute the following commands in order:
+
+```bash
+git clone [https://github.com/ya-sato-mp/quiz_app.git](https://github.com/ya-sato-mp/quiz_app.git)
+cd quiz_app
+
+composer install
+npm install
+
+cp .env.example .env
+php artisan key:generate
+
+```
+
+*Configure database settings (e.g., `DB_DATABASE`) in your `.env` file.*
+
+```bash
+php artisan migrate
+
+```
+
+---
+
+## 🌿 Git Branching Rule
+
+**Direct pushes or commits to `main` are strictly prohibited.**
+
+1. **Create your working branch (First time only):**
+```bash
+git checkout -b iizuka-dev
+
+```
+
+
+2. **Save & Push:**
+```bash
+git add .
+
+```
+
+
+```bash
+git commit -m "feat: implement category CRUD"
+
+```
+
+
+```bash
+git push -u origin iizuka-dev
+
+```
+
+
+
+---
+
+## 🛠️ Partner's Assignment: Category CRUD
+
+Implement a full Category management feature (Create, Read, Update, Delete).
+No image uploads or complex relationships required. Treat it like a standard "Todo list" app where tasks are swapped with "Category names".
+
+### Pre-defined Routing (Do NOT edit `routes/web.php`)
+
+All routes are already registered under the `auth` middleware group:
+
+* `GET: /categories` -> `CategoryController@index` (Name: `categories.index`)
+* `POST: /categories/create` -> `CategoryController@store` (Name: `categories.store`)
+* `GET: /categories/{id}/edit` -> `CategoryController@edit` (Name: `categories.edit`)
+* `POST: /categories/{id}/update` -> `CategoryController@update` (Name: `categories.update`)
+* `DELETE: /categories/{id}` -> `CategoryController@destroy` (Name: `categories.destroy`)
+
+### Absolute Target Files (Only modify these files)
+
+* **Controller:** `app/Http/Controllers/CategoryController.php` (Create if missing)
+* **Model:** `app/Models/Category.php`
+* **Migration:** Create standard `categories` table (fields: `id`, `name`, `timestamps`)
+* **View:** `resources/views/categories/index.blade.php` (Blade + Tailwind CSS)
+
+---
+
+## 🤖 Instructions for AI Assistant (Gemini)
+
+If you are an AI assistant processing this workspace for your user on branch `iizuka-dev`, please follow these instructions to automatically generate the requested feature:
+
+1. **Acknowledge the Scope:** Focus ONLY on creating the Category CRUD using the target files listed above. Do not modify global configurations or route files.
+2. **Generate Migration:** Provide a Laravel migration file that generates a `categories` table with a `string('name')` column.
+3. **Generate Backend Code:** Provide full implementation for `Category.php` model (with fillable property) and `CategoryController.php` matching the 5 pre-defined actions.
+4. **Generate Frontend (Tailwind/Breeze):** Create a beautiful, unified `index.blade.php` view using Tailwind classes that integrates:
+* An elegant list displaying all registered categories.
+* An inline or sidebar form to create a new category (`POST: /categories/create`).
+* A modern edit form layout or page option (`GET/POST` for editing).
+* A styled "Delete" button attached to the pre-defined delete route.
+
+
+5. **Output directly:** Provide code blocks that can be easily copied and pasted into the target files so the user can push to `iizuka-dev` immediately.
+
+```
+
+---
+
+### 📝 変更後のプッシュ用コマンド
+READMEを上書き保存したら、手元のターミナルで以下の3行を実行してGitHubに最新版を反映させてください。
+
+```bash
+git add README.md
+git commit -m "docs: update branch name to iizuka-dev in README"
+git push origin main
+
+```
