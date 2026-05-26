@@ -1,3 +1,86 @@
+# 🧠 世界のクイズ ＆ オリジナルクイズ共有アプリ（quiz_app）
+
+海外のリアルタイムクイズAPIから問題を取得しつつ、自分たちでも画像付きのオリジナルクイズを投稿して遊べるWebサービス。
+
+---
+
+## 🗺️ 全体のイメージ（役割分担）
+
+作るアプリの構造はこんな感じ。
+担当する部屋が完全に分かれているので、お互いのコードがコンフリクすることはない
+
+* **メイン画面（API・分析）：** [yasato] が担当（裏で全部繋ぎ込みます）
+* **クイズ投稿部屋（CRUD）：** [yasato] が担当（問題文や画像を保存）
+* **カテゴリ管理部屋（CRUD）：** ⭐️**[相方さん]** が担当（文字を保存するだけ！）
+
+---
+
+## 🚀 環境構築
+
+まずはプロジェクトを自分のPCに持ってきて、動かせる状態に。
+ターミナルで1行ずつ実行。
+
+# 1. データを自分のPCにダウンロード
+git clone [https://github.com/ya-sato-mp/quiz_app.git](https://github.com/ya-sato-mp/quiz_app.git)
+cd quiz_app
+
+# 2. 必要なパーツ（ライブラリ）をインストール
+composer install
+npm install
+
+# 3. 設定ファイル（.env）の作成
+cp .env.example .env
+php artisan key:generate
+※ .env ファイルを開き、自分のデータベース設定（DB_DATABASE=データベース名など）に書き換え。
+
+Bash
+# 4. データベースにテーブルを作る
+php artisan migrate
+
+
+
+① ブランチを作る
+作業を始める前に、必ずこのコマンドを打って自分専用の部屋に切り替えます。
+
+Bash
+git checkout -b partner-category
+
+② キリが良いところで保存＆プッシュ
+Bash
+git add .
+git commit -m "カテゴリの一覧画面を作ったよ"
+git push origin partner-category
+③ プルリク（合体申請）を出す
+GitHubのブラウザ画面を開くと「Compare & pull request」という緑のボタンが出るので、それを押して僕に合体申請（プルリク）を送れば完了です！
+
+🛠️ ⭐️相方さんの担当：『カテゴリの文字CRUD』
+クイズのジャンル（例：「アニメ」「歴史」「IT」など）を登録・管理する機能を作ってもらいます。
+画像や難しい設定は一切不要！授業でやった「Todoアプリの文字（タスク内容）」を「カテゴリ名」に変えるだけでOK。
+
+📌 作る画面と処理は3つだけ！
+一覧 ＆ 登録画面（GET: /categories）
+
+今あるカテゴリが縦に並んでいて、新しく追加できる入力欄がある画面。
+
+保存ボタンの裏側の処理（POST: /categories/create）
+
+入力された文字をデータベースに保存する処理。
+
+削除ボタンの裏側の処理（DELETE: /categories/{id}）
+
+一覧の横にある「削除」ボタンを押したらデータを消す処理。
+
+📁 触るファイル（ここ以外は触らなくてOK！）
+
+ルート（道路）： routes/web.php
+
+コントローラ（頭脳）： app/Http/Controllers/CategoryController.php
+
+モデル（データ）： app/Models/Category.php
+
+ビュー（見た目）： resources/views/categories/index.blade.php
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
