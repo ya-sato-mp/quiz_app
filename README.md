@@ -8,80 +8,110 @@
 
 ## 🗺️ 全体のイメージ（役割分担）
 
-作るアプリの構造はこんな感じ。
-担当する部屋が完全に分かれているので、お互いのコードがコンフリクすることはない
+アプリの構造はこんな感じです。担当するエリアを完全に分けているので、お互いのコードが衝突（コンフリクト）する心配はありません！
 
-* **メイン画面（API・分析）：** [yasato] が担当（裏で全部繋ぎ込みます）
-* **クイズ投稿部屋（CRUD）：** [yasato] が担当（問題文や画像を保存）
-* **カテゴリ管理部屋（CRUD）：** ⭐️
+* **メイン画面（API連携・分析）：** [yasato] が担当（裏の繋ぎ込みは全部やります）
+* **クイズ投稿機能（CRUD）：** [yasato] が担当（問題文やヒント画像の保存など）
+* **カテゴリ管理機能（CRUD）：** ⭐️**[iizukaさん]** が担当（文字を保存するだけでOK！）
 
 ---
 
-## 🚀 環境構築
+## 🚀 環境構築の手順
 
-まずはプロジェクトを自分のPCに持ってきて、動かせる状態に。
-ターミナルで1行ずつ実行。
+まずはプロジェクトを自分のPCに持ってきて、動かせる状態にします。ターミナルで1行ずつ実行してください。
 
-# 1. データを自分のPCにダウンロード
+### 1. データのダウンロードと移動
+```bash
 git clone [https://github.com/ya-sato-mp/quiz_app.git](https://github.com/ya-sato-mp/quiz_app.git)
 cd quiz_app
 
-# 2. 必要なパーツ（ライブラリ）をインストール
+```
+
+### 2. ライブラリのインストール
+
+```bash
 composer install
 npm install
 
-# 3. 設定ファイル（.env）の作成
+```
+
+### 3. 設定ファイル（.env）の準備
+
+```bash
 cp .env.example .env
 php artisan key:generate
-※ .env ファイルを開き、自分のデータベース設定（DB_DATABASE=データベース名など）に書き換え。
 
-Bash
-# 4. データベースにテーブルを作る
+```
+
+※ `.env` ファイルを開き、自分のデータベース設定（`DB_DATABASE=データベース名` など）に合わせて書き換えてください。
+
+### 4. マイグレーション（テーブル作成）
+
+```bash
 php artisan migrate
 
+```
 
+---
 
-① ブランチを作る
-作業を始める前に、必ずこのコマンドを打って自分専用の部屋に切り替えます。
+## 🌿 Gitの作業ルール
 
-Bash
-git checkout -b partner-category
+**※重要：`main` ブランチで直接コードを書くのはNGでお願いします！**
 
-② キリが良いところで保存＆プッシュ
-Bash
+### ① 自分の作業ブランチを作る（最初の一回だけ）
+
+作業を始める前に、必ずこのコマンドを打って自分専用の部屋に切り替えてください。
+
+```bash
+git checkout -b iizuka-dev
+
+```
+
+### ② キリが良いところで保存＆プッシュ
+
+```bash
 git add .
 git commit -m "カテゴリの一覧画面を作ったよ"
-git push origin partner-category
-③ プルリク（合体申請）を出す
-GitHubのブラウザ画面を開くと「Compare & pull request」という緑のボタンが出るので、それを押して僕に合体申請（プルリク）を送れば完了です！
+git push -u origin iizuka-dev
 
-🛠️ ⭐️相方さんの担当：『カテゴリの文字CRUD』
-クイズのジャンル（例：「アニメ」「歴史」「IT」など）を登録・管理する機能を作ってもらいます。
-画像や難しい設定は一切不要！授業でやった「Todoアプリの文字（タスク内容）」を「カテゴリ名」に変えるだけでOK。
+```
 
-📌 作る画面と処理は3つだけ！
-一覧 ＆ 登録画面（GET: /categories）
+### ③ プルリク（合体申請）を出す
 
-今あるカテゴリが縦に並んでいて、新しく追加できる入力欄がある画面。
+GitHubのブラウザ画面を開くと「**Compare & pull request**」という緑色のボタンが出るので、それを押して僕にプルリクを送れば作業完了です！
 
-保存ボタンの裏側の処理（POST: /categories/create）
+---
 
-入力された文字をデータベースに保存する処理。
+## 🛠️ ⭐️iizukaさんの担当：『カテゴリ管理（CRUD）』
 
-削除ボタンの裏側の処理（DELETE: /categories/{id}）
+クイズのジャンル（例：「アニメ」「歴史」「IT」など）を登録・管理する機能です。
+画像アップロードや難しい設定は一切いりません！授業でやった「Todoアプリの文字（タスク内容）」を「カテゴリ名」に変えるイメージで大丈夫です。
 
-一覧の横にある「削除」ボタンを押したらデータを消す処理。
+### 📌 実装する機能はこれだけ！
 
-📁 触るファイル（ここ以外は触らなくてOK！）
+1. **一覧表示 ＆ 登録画面**（`GET: /categories`）
+* 今あるカテゴリが縦に並んでいて、新しく追加できる入力欄がある画面。
 
-ルート（道路）： routes/web.php
 
-コントローラ（頭脳）： app/Http/Controllers/CategoryController.php
+2. **保存処理**（`POST: /categories/create`）
+* ボタンが押されたら、入力された文字をデータベースに保存する処理。
 
-モデル（データ）： app/Models/Category.php
 
-ビュー（見た目）： resources/views/categories/index.blade.php
+3. **削除処理**（`DELETE: /categories/{id}`）
+* 一覧の横にある「削除」ボタンを押したら、そのデータを消す処理。
 
+
+
+### 📁 触るファイル（ここ以外は触らなくて大丈夫）
+
+ルート（道路）はもう作っておいたので、以下のファイルだけを編集・作成してください。
+
+* **コントローラ（頭脳）：** `app/Http/Controllers/CategoryController.php` （なければ作成）
+* **モデル（データ）：** `app/Models/Category.php`
+* **マイグレーション：** `categories` テーブルを作る設定ファイル（id、name、timestampsがあればOK）
+* **ビュー（見た目）：** `resources/views/categories/index.blade.php`
+
+---
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
