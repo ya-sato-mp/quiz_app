@@ -41,6 +41,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/quizzes/play', [QuizController::class, 'showPlay'])->name('quizzes.play');
+    Route::post('/quizzes/{quiz}/check', [QuizController::class, 'checkAnswer'])->name('quizzes.check');
 });
 
 require __DIR__.'/auth.php';
