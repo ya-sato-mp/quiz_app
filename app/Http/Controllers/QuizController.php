@@ -61,4 +61,33 @@ class QuizController extends Controller
         // ダッシュボード（メイン画面）に戻る
         return redirect()->route('dashboard')->with('success', 'クイズを投稿しました！');
     }
+    /**
+     * オリジナルクイズの出題画面
+     */
+    public function showPlay()
+    {
+        // データベースからランダムに1問だけ取得
+        $quiz = Quiz::inRandomOrder()->first();
+
+        // 4つの選択肢（正解 + ダミー3つ）を配列にまとめてシャッフル
+        $choices = [];
+        if ($quiz) {
+            $choices = [$quiz->correct_answer, $quiz->choice_2, $quiz->choice_3, $quiz->choice_4];
+            shuffle($choices);
+        }
+
+        return view('quizzes.play', compact('quiz', 'choices'));
+    }
+
+    /**
+     * オリジナルクイズの採点処理
+     */
+    public function checkAnswer(Request $request, Quiz $quiz)
+    {
+        $userAnswer = $request->input('answer');
+        // 選んだボタンの文字と、正解の文字が一致しているか判定
+        $isCorrect = trim($userAnswer) === trim($quiz->correct_answer);
+
+        return view('quizzes.result', compact('quiz', 'userAnswer', 'isCorrect'));
+    }
 }
